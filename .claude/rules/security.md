@@ -1,3 +1,9 @@
+---
+paths:
+  - "src/**/*.java"
+  - "src/main/resources/**"
+---
+
 # 安全规范
 
 ## 禁止事项

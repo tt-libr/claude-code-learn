@@ -1,3 +1,8 @@
+---
+paths:
+  - "src/test/java/**/*.java"
+---
+
 # 测试规范
 
 ## 原则
@@ -9,6 +14,7 @@
 - 使用 @WebMvcTest，不要启动完整上下文
 - 每个公共接口至少一个 happy path 测试
 - 测试方法命名：`方法名_场景_期望结果`，例：`helloName_withValidName_returnsGreeting`
+- 无外部依赖时不引入 @MockBean，优先使用真实对象
 
 ## 执行
 - 运行单个测试：`mvn test -Dtest=ClassName`

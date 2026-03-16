@@ -1,3 +1,8 @@
+---
+paths:
+  - "src/main/java/**/*.java"
+---
+
 # Java/Spring 代码风格规范
 
 ## 通用
