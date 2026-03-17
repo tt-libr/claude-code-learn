@@ -35,7 +35,39 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_input.file_path' | grep -E '\\.java$' | xargs -I{} echo 'Modified: {}'"
+            "command": "FILE=$(jq -r '.tool_input.file_path // empty'); case \"$FILE\" in *.java) echo \"[PostToolUse] Java 文件已修改: $FILE，执行编译检查...\"; cd \"$CLAUDE_PROJECT_DIR\" && mvn compile -q 2>&1 | tail -5 && echo '[PostToolUse] ✓ 编译通过' || echo '[PostToolUse] ✗ 编译失败';; esac"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/protect-files.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Claude Code 需要你的注意\" with title \"Claude Code\"' 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && mvn compile -q 2>&1 | tail -10 && echo '[Stop Hook] ✓ 编译通过，可以停止' || { echo '[Stop Hook] ✗ 编译失败，修复错误后再停止' >&2; exit 2; }"
           }
         ]
       }
